@@ -4,6 +4,7 @@
 #include <arpa/inet.h> 
 #include <unistd.h> 
 #include <string.h> 
+#include <iostream>
 
 #include <unistd.h> 
 #include <stdio.h> 
@@ -89,13 +90,12 @@ void Client() {
 	serv_addr.sin_port = htons(PORT); 
 	
 	// Convert IPv4 and IPv6 addresses from text to binary form 
-	if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) 
+	if(inet_pton(AF_INET, "192.168.178.153", &serv_addr.sin_addr)<=0) 
 	{ 
 		printf("\nInvalid address/ Address not supported \n"); 
 	} 
 
-	if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
-	{ 
+	if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) { 
 		printf("\nConnection Failed \n"); 
 	} 
 	send(sock , hello , strlen(hello) , 0 ); 
@@ -111,5 +111,6 @@ int main() {
 	// std::thread CLIENT(Client);
 	// SERVER.detach();
 	// CLIENT.detach();
-	Server();
+	// Server();
+	Client();
 }
