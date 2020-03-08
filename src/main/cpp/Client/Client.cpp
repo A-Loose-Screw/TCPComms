@@ -2,6 +2,18 @@
 
 using namespace TCPComms;
 
+template <typename RegisterType>
+void Client::Register(std::string name, RegisterType item) {
+	// for (unsigned int i = 0; i < sizeof(itemQue)/sizeof(itemQue[0]); i++) {
+		
+	// }
+
+	// while (itemQue[itemNum] != 0) {
+	// 	itemNum++
+	// }
+	// itemQue[itemNum] = name;
+}
+
 void Client::Start() {
  #ifdef _WIN32
 	/**
@@ -17,8 +29,7 @@ void Client::Start() {
 
 	serv_addr.sin_family = AF_INET;
 	if (port <= 0) {
-		printf("\n Port number invalid, Setting port to default 13200 \n");
-		port = 13200;
+		printf("\n Port number invalid \n");
 	}
 	serv_addr.sin_port = htons(port);
 

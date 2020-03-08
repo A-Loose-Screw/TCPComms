@@ -22,6 +22,7 @@ typedef int socklen_t;
 
 // Shared Libraries
 #include <string>
+#include <vector>
 
 namespace TCPComms {
 	class Client {
@@ -80,8 +81,22 @@ namespace TCPComms {
 
    private:
 	 	// Address
-    uint16_t port;        // Define the port type.
-	  const char *ipaddress;    // An IP address for IPv4
-		struct sockaddr_in serv_addr;
+    uint16_t port = 13200; // Define the port type.
+	  const char *ipaddress = "10.47.88.100"; // An IP address for IPv4
+		struct sockaddr_in serv_addr; // Server Address
+
+		// Item que/ control
+		// template<typename ItemType>
+		struct item {
+			int item;
+			std::string itemName;
+		};
+		// std::vector<item> items(2);
+		// std::string itemQue[999];
+		// int itemNum = 0;
+		template<typename ItemType>
+		void SendItem(ItemType item);
+		template<typename ItemType>
+		void ReceiveItem(ItemType item);
 	};
 };
