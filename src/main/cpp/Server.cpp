@@ -23,7 +23,7 @@
 
 #include <thread>
 
-#define PORT 9090
+#define PORT 13200
 void Server() { 
 	int server_fd, new_socket, valread; 
 	struct sockaddr_in address; 
