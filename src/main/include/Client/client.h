@@ -18,6 +18,19 @@ typedef int socklen_t;
 #include <arpa/inet.h>      // Contains all inet_* functions.
 #include <errno.h>          // Contains the error functions.
 #include <fcntl.h>          // File control.
+#include <stdio.h> 
+#include <sys/socket.h> 
+#include <arpa/inet.h> 
+#include <unistd.h> 
+#include <string.h> 
+#include <iostream>
+
+#include <unistd.h> 
+#include <stdio.h> 
+#include <sys/socket.h> 
+#include <stdlib.h> 
+#include <netinet/in.h> 
+#include <string.h> 
 #endif
 
 // Shared Libraries
@@ -58,11 +71,20 @@ namespace TCPComms {
 			}
 
 
-			/**
-			 * Register device for the client to listen for
-			 */
-			template <typename RegisterType>
-			void Register(std::string name, RegisterType *item);
+			template <typename type>
+			void Register(std::string name, type *item) {
+				if (std::is_same<type, int>::value) {
+
+				} else if (std::is_same<type, std::string>::value) {
+
+				} else if (std::is_same<type, bool>::value) {
+
+				} else if (std::is_same<type, double>::value) {
+
+				} else {
+					std::cout << "Unknown Item Registered Named: " << name << std::endl;
+				}
+			}
 
 			/**
 			 * Starts Client
@@ -72,32 +94,31 @@ namespace TCPComms {
 			/**
 			 * Stops Client
 			 */
-			void Stop();
+			void Stop() {
+				STOP_SERVICE = true;
+			}
 
 	#ifdef _WIN32  // Windows 95 and above
 		typedef SOCKET sock;
 	#else         // UNIX/Linux
-		typedef int sock;
+		int sock = 0;
+		int valread;
+		char buffer[1024] = {0};
 	#endif
 
    private:
+
+		// Function to send and receive item
+		static void ItemIntIO(std::string name, int *item);
+		static void ItemStringIO(std::string name, std::string *item);
+		static void ItemDoubleIO(std::string name, double *item);
+		static void ItemBoolIO(std::string name, bool *item);
+
 	 	// Address
     uint16_t port = 13200; // Define the port type.
 	  const char *ipaddress = "10.47.88.100"; // An IP address for IPv4
 		struct sockaddr_in serv_addr; // Server Address
 
-		// Item que/ control
-		// template<typename ItemType>
-		struct item {
-			int item;
-			std::string itemName;
-		};
-		// std::vector<item> items(2);
-		// std::string itemQue[999];
-		// int itemNum = 0;
-		template<typename ItemType>
-		void SendItem(ItemType item);
-		template<typename ItemType>
-		void ReceiveItem(ItemType item);
+		bool STOP_SERVICE = false;
 	};
 };

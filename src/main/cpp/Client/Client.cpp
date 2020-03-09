@@ -2,16 +2,26 @@
 
 using namespace TCPComms;
 
-template <typename RegisterType>
-void RegisterItem(std::string name, RegisterType *item) {
-	/** register item */
+// Send/Recieve item info
+// void Client::ItemStringIO(std::string name, std::string *item) {
+// 	// while(!STOP_SERVICE) {
+// 	// 	// send(sock, item, strlen((char *)item), 0);
+// 	// 	valread = read(sock, buffer, 1024);
+// 	// }
+// }
+// template <typename t>
+void Client::ItemStringIO(std::string name, std::string *item) {
+
 }
 
-template <typename RegisterType>
-void Client::Register(std::string name, RegisterType *item) {
-	std::thread RegisterThread(RegisterItem, name, item);
-	RegisterThread.detach();
-}
+// void Client::RegisterString(std::string name,	std::string *item) {
+// 	std::thread IOthread(ItemStringIO, name, item);
+// 	IOthread.detach();
+// }
+
+// void Client::Register(std::string name, std::string *item) {
+	
+// }
 
 void Client::Start() {
  #ifdef _WIN32
@@ -20,8 +30,6 @@ void Client::Start() {
 	 * Make windows version for client start
 	 */
  #else
-	int sock = 0, valread;
-	char buffer[1024] = {0};
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		printf("\n Socket Creation Error \n");
 	}
