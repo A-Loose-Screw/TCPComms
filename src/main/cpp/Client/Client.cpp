@@ -3,15 +3,14 @@
 using namespace TCPComms;
 
 template <typename RegisterType>
-void Client::Register(std::string name, RegisterType item) {
-	// for (unsigned int i = 0; i < sizeof(itemQue)/sizeof(itemQue[0]); i++) {
-		
-	// }
+void RegisterItem(std::string name, RegisterType *item) {
+	/** register item */
+}
 
-	// while (itemQue[itemNum] != 0) {
-	// 	itemNum++
-	// }
-	// itemQue[itemNum] = name;
+template <typename RegisterType>
+void Client::Register(std::string name, RegisterType *item) {
+	std::thread RegisterThread(RegisterItem, name, item);
+	RegisterThread.detach();
 }
 
 void Client::Start() {

@@ -23,6 +23,7 @@ typedef int socklen_t;
 // Shared Libraries
 #include <string>
 #include <vector>
+#include <thread>
 
 namespace TCPComms {
 	class Client {
@@ -61,7 +62,7 @@ namespace TCPComms {
 			 * Register device for the client to listen for
 			 */
 			template <typename RegisterType>
-			void Register(std::string name, RegisterType item);
+			void Register(std::string name, RegisterType *item);
 
 			/**
 			 * Starts Client
