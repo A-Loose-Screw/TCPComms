@@ -73,19 +73,19 @@ namespace TCPComms {
 
 			template <typename type>
 			void Register(std::string name, type *item) {
-				if (std::is_same<type, int>::value) {
+				if (typeid(type) == typeid(int)) {
 
-				} else if (std::is_same<type, std::string>::value) {
+				} else if (typeid(type) == typeid(std::string)) {
 
-				} else if (std::is_same<type, bool>::value) {
+				} else if (typeid(type) == typeid(bool)) {
 
-				} else if (std::is_same<type, double>::value) {
+				} else if (typeid(type) == typeid(double)) {
 
 				} else {
-					std::cout << "Unknown Item Registered Named: " << name << std::endl;
+					std::cout << "No Valid conversion for value named: " << name << std::endl;
 				}
 			}
-
+			
 			/**
 			 * Starts Client
 			 */
@@ -109,10 +109,7 @@ namespace TCPComms {
    private:
 
 		// Function to send and receive item
-		static void ItemIntIO(std::string name, int *item);
 		static void ItemStringIO(std::string name, std::string *item);
-		static void ItemDoubleIO(std::string name, double *item);
-		static void ItemBoolIO(std::string name, bool *item);
 
 	 	// Address
     uint16_t port = 13200; // Define the port type.

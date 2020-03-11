@@ -84,10 +84,14 @@ void Server() {
 // Test case to send and recieve;
 TCPComms::Client client;
 std::string Testcase = "This is a test";
+int Testcase2 = 5;
 int main() {
-	Server();
-	client.Start();
-	client.SetIP("192.168.178.153");
-	client.SetPort(13200);
-	client.Register<std::string>("TestCase", &Testcase);
+	// client.Register<std::string>("TestCase", &Testcase);
+	client.Register<int>("TestCase", &Testcase2);
+
+	// Server();
+	// client.Start();
+	// client.SetIP("192.168.178.153");
+	// client.SetPort(13200);
+	// client.Register<std::string>("TestCase", &Testcase);
 }

@@ -2,27 +2,6 @@
 
 using namespace TCPComms;
 
-// Send/Recieve item info
-// void Client::ItemStringIO(std::string name, std::string *item) {
-// 	// while(!STOP_SERVICE) {
-// 	// 	// send(sock, item, strlen((char *)item), 0);
-// 	// 	valread = read(sock, buffer, 1024);
-// 	// }
-// }
-// template <typename t>
-void Client::ItemStringIO(std::string name, std::string *item) {
-
-}
-
-// void Client::RegisterString(std::string name,	std::string *item) {
-// 	std::thread IOthread(ItemStringIO, name, item);
-// 	IOthread.detach();
-// }
-
-// void Client::Register(std::string name, std::string *item) {
-	
-// }
-
 void Client::Start() {
  #ifdef _WIN32
 	/**
