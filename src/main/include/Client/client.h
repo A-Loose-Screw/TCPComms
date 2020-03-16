@@ -74,13 +74,17 @@ namespace TCPComms {
 			template <typename type>
 			void Register(std::string name, type *item) {
 				if (typeid(type) == typeid(int)) {
-
+					// std::thread RegisterIntegerThread(ItemIntIO, name, item);
+					// RegisterIntegerThread.detach();
 				} else if (typeid(type) == typeid(std::string)) {
-
+					// std::thread RegisterStringThread(ItemStringIO, name, item);
+					// RegisterStringThread.detach();
 				} else if (typeid(type) == typeid(bool)) {
-
+					// std::thread RegisterBoolThread(ItemBoolIO, name, item);
+					// RegisterBoolThread.detach();
 				} else if (typeid(type) == typeid(double)) {
-
+					// std::thread RegisterDoubleThread(ItemDoubleIO, name, item);
+					// RegisterDoubleThread.detach();
 				} else {
 					std::cout << "No Valid conversion for value named: " << name << std::endl;
 				}
@@ -98,6 +102,14 @@ namespace TCPComms {
 				STOP_SERVICE = true;
 			}
 
+
+			/**
+			 * Returns the service state
+			 */
+			bool GetServiceStopped() {
+				return STOP_SERVICE;
+			}
+
 	#ifdef _WIN32  // Windows 95 and above
 		typedef SOCKET sock;
 	#else         // UNIX/Linux
@@ -109,13 +121,16 @@ namespace TCPComms {
    private:
 
 		// Function to send and receive item
-		static void ItemStringIO(std::string name, std::string *item);
+		void ItemIntIO(std::string name, int *item);
+		void ItemStringIO(std::string name, std::string *item);
+	  void ItemBoolIO(std::string name, bool *item);
+		void ItemDoubleIO(std::string name, double *item);
 
 	 	// Address
     uint16_t port = 13200; // Define the port type.
 	  const char *ipaddress = "10.47.88.100"; // An IP address for IPv4
 		struct sockaddr_in serv_addr; // Server Address
 
-		bool STOP_SERVICE = false;
+		bool STOP_SERVICE;
 	};
 };

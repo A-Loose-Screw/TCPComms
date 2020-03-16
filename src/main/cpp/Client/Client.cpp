@@ -2,6 +2,49 @@
 
 using namespace TCPComms;
 
+void Client::ItemIntIO(std::string name, int *item) {
+	while(!STOP_SERVICE) {
+		#ifdef _WIN32
+		
+		#else
+
+		#endif
+	}
+}
+
+void Client::ItemStringIO(std::string name, std::string *item) {
+	while(!STOP_SERVICE) {
+		#ifdef _WIN32
+
+		#else
+			send(sock, item, item->length(), 0);
+			valread = read(sock, buffer, 1024);
+			// std::cout << "Thread running" << std::endl;
+			printf("This thread is running\n");
+		#endif
+	}
+}
+
+void Client::ItemBoolIO(std::string name, bool *item) {
+	while(!STOP_SERVICE) {
+		#ifdef _WIN32
+
+		#else
+
+		#endif
+	}
+}
+
+void Client::ItemDoubleIO(std::string name, double *item) {
+	while(!STOP_SERVICE) {
+		#ifdef _WIN32
+
+		#else
+
+		#endif
+	}
+}
+
 void Client::Start() {
  #ifdef _WIN32
 	/**
