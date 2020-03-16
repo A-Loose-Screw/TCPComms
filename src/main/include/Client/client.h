@@ -39,6 +39,7 @@ typedef int socklen_t;
 #include <thread>
 
 namespace TCPComms {
+
 	class Client {
 
     public:
@@ -70,12 +71,11 @@ namespace TCPComms {
 				return port;
 			}
 
-
 			template <typename type>
 			void Register(std::string name, type *item) {
+				std::cout << "Register active" << std::endl;
 				if (typeid(type) == typeid(int)) {
-					// std::thread RegisterIntegerThread(ItemIntIO, name, item);
-					// RegisterIntegerThread.detach();
+					ItemIntIO(name, item);
 				} else if (typeid(type) == typeid(std::string)) {
 					// std::thread RegisterStringThread(ItemStringIO, name, item);
 					// RegisterStringThread.detach();
@@ -89,7 +89,8 @@ namespace TCPComms {
 					std::cout << "No Valid conversion for value named: " << name << std::endl;
 				}
 			}
-			
+
+
 			/**
 			 * Starts Client
 			 */
@@ -123,7 +124,7 @@ namespace TCPComms {
 		// Function to send and receive item
 		void ItemIntIO(std::string name, int *item);
 		void ItemStringIO(std::string name, std::string *item);
-	  void ItemBoolIO(std::string name, bool *item);
+		void ItemBoolIO(std::string name, bool *item);
 		void ItemDoubleIO(std::string name, double *item);
 
 	 	// Address
@@ -132,5 +133,7 @@ namespace TCPComms {
 		struct sockaddr_in serv_addr; // Server Address
 
 		bool STOP_SERVICE;
+
+		static Client _client;
 	};
 };

@@ -2,14 +2,17 @@
 
 using namespace TCPComms;
 
-void Client::ItemIntIO(std::string name, int *item) {
-	while(!STOP_SERVICE) {
-		#ifdef _WIN32
-		
-		#else
-
-		#endif
+void ItemIntIOThread(std::string name, int *item, bool *STOP_SERVICE, int valread, int sock, char buffer[]) {
+	while(!*STOP_SERVICE) {
+		std::cout << name << " Thread Running" << std::endl;
 	}
+	std::cout << "Named thread '" << name << "' Stopped";
+}
+
+void Client::ItemIntIO(std::string name, int *item) {
+	std::cout << "ItemInt Called" << std::endl;
+	std::thread ItemIntIO_T(ItemIntIOThread, name, item, &STOP_SERVICE, valread, sock, buffer);
+	ItemIntIO_T.detach();
 }
 
 void Client::ItemStringIO(std::string name, std::string *item) {

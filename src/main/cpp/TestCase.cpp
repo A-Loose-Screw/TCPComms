@@ -90,9 +90,12 @@ int main() {
 	client.Start();
 	client.SetIP("192.168.178.153");
 	client.SetPort(13200);
-	client.Register<std::string>("TestCase", &Testcase);
+	client.Register<int>("Motor", &Testcase2);
+	client.Register<int>("Sensor", &Testcase2);
 	
 	std::cout << "Start Working" << std::endl;
 
-	while(true) {}
+	sleep(10);
+
+	client.Stop();
 }
