@@ -15,6 +15,8 @@ void Server() {
 		perror("socket failed"); 
 		exit(EXIT_FAILURE); 
 	} 
+
+	std::cout << "section 1 complete" << std::endl;
 	
 	// Forcefully attaching socket to the port 8080 
 	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
@@ -26,6 +28,8 @@ void Server() {
 	address.sin_family = AF_INET; 
 	address.sin_addr.s_addr = INADDR_ANY; 
 	address.sin_port = htons( PORT ); 
+
+	std::cout << "Section 3 complete" << std::endl;
 	
 	// Forcefully attaching socket to the port 8080 
 	if (bind(server_fd, (struct sockaddr *)&address, 
@@ -34,21 +38,28 @@ void Server() {
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
 	} 
+
+	std::cout << "Section 4 complete" << std::endl;
 	if (listen(server_fd, 3) < 0) 
 	{ 
 		perror("listen"); 
 		exit(EXIT_FAILURE); 
 	} 
+
+	std::cout << "Section 5 complete" << std::endl;
 	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, 
 					(socklen_t*)&addrlen))<0) 
 	{ 
 		perror("accept"); 
 		exit(EXIT_FAILURE); 
 	} 
+
+	std::cout << "Section 6 complete" << std::endl;
 	valread = read( new_socket , buffer, 1024); 
 	printf("%s\n",buffer ); 
 	send(new_socket , hello , strlen(hello) , 0 ); 
 	printf("Hello message sent\n"); 
+	std::cout << "Section 7 complete" << std::endl;
 } 
 
 
@@ -88,15 +99,19 @@ int Testcase2 = 5;
 bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
-	// Server();
+	while (true) {
+		std::cout << "Server active" << std::endl;
+		Server();
+	}
+	std::cout << "Working" << std::endl;
 	client.Start();
-	client.SetIP("192.168.178.153");
+	client.SetIP("127.0.0.1");
 	client.SetPort(13200);
-	// client.Register("TestCase", &Testcase);
+	client.Register("TestCase", &Testcase);
 	
 	std::cout << "Start Working" << std::endl;
 
-	sleep(10);
+	// sleep(10);
 
-	client.Stop();
+	// client.Stop();
 }

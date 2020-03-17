@@ -1,6 +1,8 @@
 // ==================================================================================================================
 //  Include Files.
 // ==================================================================================================================
+
+#pragma once
 #ifdef _WIN32                // Windows 95 and above
 #include "winsock2.h"       // Almost everything is contained in one file.
 #include "Ws2tcpip.h"
@@ -49,123 +51,99 @@ namespace TCPComms {
 
 	class Client {
 
-    public:
-			/**
-			 * Set what IP the client listens to
-			 */
-			void SetIP(const char *ip) {
-				ipaddress = ip;
+   public:
+		/**
+		 * Set what IP the client listens to
+		 */
+		void SetIP(const char *ip);
+
+		/**
+		 * return the ip address
+		 */
+		const char *GetIP();
+
+		/**
+		 * Set what port the client listens on
+		 */
+		void SetPort(uint16_t Port);
+		/**
+		 * return the port
+		 */
+		uint16_t GetPort();
+
+		/**
+		 * Starts Client
+		 */
+		void Start();
+
+		/**
+		 * Stops Client
+		 */
+		void Stop() {
+			_clientState = ClientState::STOPPED;
+		}
+
+		/**
+		 * Pause Client
+		 */
+		void Pause() {
+			_clientState = ClientState::PAUSED;
+		}
+
+		/**
+		 * Get State of Client
+		 */
+		ClientState GetClientState() {
+			return _clientState;
+		}
+
+		/**
+		 * Register Item with name
+		 */
+		void Register(std::string name, int *item) {
+			try {
+				ItemIntIO(name, item);
 			}
-
-			/**
-			 * return the ip address
-			 */
-			const char *GetIP() {
-				return ipaddress;
+			catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
 			}
+		}
 
-			/**
-			 * Set what port the client listens on
-			 */
-			void SetPort(uint16_t Port) {
-				port = Port;
+		/**
+		 * Register Item with name
+		 */
+		void Register(std::string name, std::string *item) {
+			try {
+				ItemStringIO(name, item);
 			}
-
-			/**
-			 * return the port
-			 */
-			uint16_t GetPort() {
-				return port;
+			catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
 			}
+		}
 
-			/**
-			 * Starts Client
-			 */
-			void Start();
-
-			/**
-			 * Stops Client
-			 */
-			void Stop() {
-				_clientState = ClientState::STOPPED;
+		/**
+		 * Register Item with name
+		 */
+		void Register(std::string name, bool *item) {
+			try {
+				ItemBoolIO(name, item);
 			}
-
-			/**
-			 * Pause Client
-			 */
-			void Pause() {
-				_clientState = ClientState::PAUSED;
+			catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
 			}
+		}
 
-			/**
-			 * Get State of Client
-			 */
-			ClientState GetClientState() {
-				return _clientState;
+		/**
+		 * Register Item with name
+		 */
+		void Register(std::string name, double *item) {
+			try {
+				ItemDoubleIO(name, item);
 			}
-
-			/**
-			 * Register Item with name
-			 */
-			void Register(std::string name, int *item) {
-				try {
-					ItemIntIO(name, item);
-				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
-				}
+			catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
 			}
-
-			/**
-			 * Register Item with name
-			 */
-			void Register(std::string name, std::string *item) {
-				try {
-					ItemStringIO(name, item);
-				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
-				}
-			}
-
-			/**
-			 * Register Item with name
-			 */
-			void Register(std::string name, bool *item) {
-				try {
-					ItemBoolIO(name, item);
-				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
-				}
-			}
-
-			/**
-			 * Register Item with name
-			 */
-			void Register(std::string name, double *item) {
-				try {
-					ItemDoubleIO(name, item);
-				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
-				}
-			}
-
-			/**
-			 * Returns the service state
-			 */
-			bool GetServiceStopped() {
-				return STOP_SERVICE;
-			}
-
-	#ifdef _WIN32  // Windows 95 and above
-		typedef SOCKET sock;
-	#else         // UNIX/Linux
-		int sock = 0;
-		int valread;
-		char buffer[1024] = {0};
-	#endif
+		}
 
    private:
 
@@ -178,14 +156,6 @@ namespace TCPComms {
 		
 		// Thread Controller & Checkers
 		void SetState(ClientState state);
-
-	 	// Address
-    uint16_t port = 13200; // Define the port type.
-	  const char *ipaddress = "10.47.88.100"; // An IP address for IPv4
-		struct sockaddr_in serv_addr; // Server Address
-
-		bool STOP_SERVICE = false;
-		bool PAUSE_SERVICE = false;
 
 		ClientState _clientState{ ClientState::ACTIVE };
 	};
