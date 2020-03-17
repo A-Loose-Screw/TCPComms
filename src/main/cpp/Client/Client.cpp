@@ -5,9 +5,7 @@ using namespace TCPComms;
 struct ConnectionVars {
 	// Address
 	uint16_t port = 13200; // Define the port type.
-	const char *ipaddress = "10.47.88.100"; // An IP address for IPv4
-	struct sockaddr_in serv_addr; // Server Address
-
+	const char *ipaddress = "127.0.0.1"; // An IP address for IPv4
 
 	#ifdef _WIN32  // Windows 95 and above
 		typedef SOCKET sock;
@@ -15,6 +13,7 @@ struct ConnectionVars {
 		int sock = 0;
 		int valread;
 		char buffer[1024] = {0};
+		struct sockaddr_in serv_addr; // Server Address
 	#endif
 }; ConnectionVars cv;
 
@@ -60,7 +59,7 @@ void ItemStringIOThread(std::string name, std::string *item, ClientState *_clien
 			#ifdef _WIN32
 
 			#else
-				send(cv.sock, item, item->length(), 0);
+				// send(cv.sock, item, item->length(), 0);
 				cv.valread = read(cv.sock, cv.buffer, 1024);
 				printf("%s\n", cv.buffer);
 			#endif
@@ -104,13 +103,9 @@ void Connect(ClientState *_clientState) {
 	}
 
 	cv.serv_addr.sin_family = AF_INET;
-	if (cv.port <= 0) {
-		printf("\n Port number invalid \n");
-		*_clientState = ClientState::COMM_FAULT;
-	}
 	cv.serv_addr.sin_port = htons(cv.port);
 
-	if (inet_pton(AF_INET, cv.ipaddress, &cv.serv_addr.sin_family) <= 0) {
+	if (inet_pton(AF_INET, cv.ipaddress, &cv.serv_addr.sin_addr) <= 0) {
 		printf("\n Invalid IP address/ address not supported \n");
 		*_clientState = ClientState::COMM_FAULT;
 	}
@@ -130,8 +125,7 @@ void Client::SetState(ClientState state) {
 }
 
 // State Checker
-void StateChecker(ClientState *currentState) {
-	// Connect(currentState);
+void ClientChecker(ClientState *currentState) {
 	while(*currentState != ClientState::STOPPED) {
 		if (*currentState == ClientState::COMM_FAULT) {
 			printf("\n Client Comm Fault Detected, Recconecting \n");
@@ -140,13 +134,17 @@ void StateChecker(ClientState *currentState) {
 		} else if (*currentState == ClientState::PAUSED) {
 			printf("\n Client Paused \n");
 		}
+		char *TestSend = "Connection to Client Successful";
+		send(cv.sock, TestSend, strlen(TestSend), 0);
+		cv.valread = read(cv.sock, cv.buffer, 1024);
+		printf("%s\n", cv.buffer);
 	}
-	printf("\n Client Has Stopped \n");
+	printf("\n Client Stopped \n");
 }
 
 // Client Starter
 void Client::Start() {
 	Connect(&_clientState);
-	std::thread StateChecker_T(StateChecker, &_clientState);
-	StateChecker_T.detach();
+	std::thread ClientChecker_T(ClientChecker, &_clientState);
+	ClientChecker_T.detach();
 }
