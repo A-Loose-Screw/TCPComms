@@ -85,13 +85,14 @@ void Server() {
 TCPComms::Client client;
 std::string Testcase = "This is a test";
 int Testcase2 = 5;
+bool Testcase3 = true;
+double Tescase4 = 0.5;
 int main() {
 	// Server();
 	client.Start();
 	client.SetIP("192.168.178.153");
 	client.SetPort(13200);
-	client.Register<int>("Motor", &Testcase2);
-	client.Register<int>("Sensor", &Testcase2);
+	// client.Register("TestCase", &Testcase);
 	
 	std::cout << "Start Working" << std::endl;
 

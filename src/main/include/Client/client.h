@@ -40,6 +40,13 @@ typedef int socklen_t;
 
 namespace TCPComms {
 
+	enum class ClientState {
+		STOPPED,
+		PAUSED,
+		COMM_FAULT,
+		ACTIVE
+	};
+
 	class Client {
 
     public:
@@ -71,26 +78,6 @@ namespace TCPComms {
 				return port;
 			}
 
-			template <typename type>
-			void Register(std::string name, type *item) {
-				std::cout << "Register active" << std::endl;
-				if (typeid(type) == typeid(int)) {
-					ItemIntIO(name, item);
-				} else if (typeid(type) == typeid(std::string)) {
-					// std::thread RegisterStringThread(ItemStringIO, name, item);
-					// RegisterStringThread.detach();
-				} else if (typeid(type) == typeid(bool)) {
-					// std::thread RegisterBoolThread(ItemBoolIO, name, item);
-					// RegisterBoolThread.detach();
-				} else if (typeid(type) == typeid(double)) {
-					// std::thread RegisterDoubleThread(ItemDoubleIO, name, item);
-					// RegisterDoubleThread.detach();
-				} else {
-					std::cout << "No Valid conversion for value named: " << name << std::endl;
-				}
-			}
-
-
 			/**
 			 * Starts Client
 			 */
@@ -100,9 +87,70 @@ namespace TCPComms {
 			 * Stops Client
 			 */
 			void Stop() {
-				STOP_SERVICE = true;
+				_clientState = ClientState::STOPPED;
 			}
 
+			/**
+			 * Pause Client
+			 */
+			void Pause() {
+				_clientState = ClientState::PAUSED;
+			}
+
+			/**
+			 * Get State of Client
+			 */
+			ClientState GetClientState() {
+				return _clientState;
+			}
+
+			/**
+			 * Register Item with name
+			 */
+			void Register(std::string name, int *item) {
+				try {
+					ItemIntIO(name, item);
+				}
+				catch(const std::exception& e) {
+					std::cerr << e.what() << '\n';
+				}
+			}
+
+			/**
+			 * Register Item with name
+			 */
+			void Register(std::string name, std::string *item) {
+				try {
+					ItemStringIO(name, item);
+				}
+				catch(const std::exception& e) {
+					std::cerr << e.what() << '\n';
+				}
+			}
+
+			/**
+			 * Register Item with name
+			 */
+			void Register(std::string name, bool *item) {
+				try {
+					ItemBoolIO(name, item);
+				}
+				catch(const std::exception& e) {
+					std::cerr << e.what() << '\n';
+				}
+			}
+
+			/**
+			 * Register Item with name
+			 */
+			void Register(std::string name, double *item) {
+				try {
+					ItemDoubleIO(name, item);
+				}
+				catch(const std::exception& e) {
+					std::cerr << e.what() << '\n';
+				}
+			}
 
 			/**
 			 * Returns the service state
@@ -127,13 +175,18 @@ namespace TCPComms {
 		void ItemBoolIO(std::string name, bool *item);
 		void ItemDoubleIO(std::string name, double *item);
 
+		
+		// Thread Controller & Checkers
+		void SetState(ClientState state);
+
 	 	// Address
     uint16_t port = 13200; // Define the port type.
 	  const char *ipaddress = "10.47.88.100"; // An IP address for IPv4
 		struct sockaddr_in serv_addr; // Server Address
 
-		bool STOP_SERVICE;
+		bool STOP_SERVICE = false;
+		bool PAUSE_SERVICE = false;
 
-		static Client _client;
+		ClientState _clientState{ ClientState::ACTIVE };
 	};
 };
