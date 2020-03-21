@@ -56,10 +56,10 @@ void Server() {
 
 	std::cout << "Section 6 complete" << std::endl;
 	// valread = read( new_socket , buffer, 1024); 
-	int Item;
+	int Item = 0;
 	while (true) {
 		recv(new_socket, &Item, sizeof(Item), 0);
-		printf("Data received: %d\n", Item);
+		std::cout << "Value: " << Item << std::endl;
 	}
 	std::cout << "Section 7 complete" << std::endl;
 } 
