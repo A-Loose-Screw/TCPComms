@@ -55,9 +55,11 @@ void Server() {
 	} 
 
 	std::cout << "Section 6 complete" << std::endl;
-	valread = read( new_socket , buffer, 1024); 
-	std::cout << "Read following" << std::endl;
-	printf("%s\n",buffer, "\n" ); 
+	// valread = read( new_socket , buffer, 1024); 
+	int Item;
+	recv(new_socket, &Item, sizeof(Item), 0);
+	// std::cout << "Read following" << std::endl;
+	printf("Data received: %d\n", Item);
 	// send(new_socket , hello , strlen(hello) , 0 ); 
 	// printf("Hello message sent\n"); 
 	std::cout << "Section 7 complete" << std::endl;
