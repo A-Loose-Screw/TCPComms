@@ -113,7 +113,7 @@ int main() {
 	// 	std::cout << "Server active" << std::endl;
 	// 	Server();
 	// }
-	client.SetIP("192.168.178.153");
+	client.SetIP("192.168.178.59");
 	client.SetPort(13200);
 	client.Start();
 	client.Register("TestCase", &Testcase2);
