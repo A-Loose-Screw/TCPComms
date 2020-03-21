@@ -56,11 +56,13 @@ void Server() {
 
 	std::cout << "Section 6 complete" << std::endl;
 	// valread = read( new_socket , buffer, 1024); 
-	int Item = 0;
+	int ItemBuffer;
+	int Item;
 	while (true) {
 		// std::cout << "Value Before: " << Item << std::endl;
-		Item = recv(new_socket, &Item, sizeof(Item), 0);
+		Item = recv(new_socket, &ItemBuffer, sizeof(Item), 0);
 		std::cout << "Value: " << Item << std::endl;
+		std::cout << "Buffer: " << ItemBuffer << std::endl;
 	}
 	std::cout << "Section 7 complete" << std::endl;
 } 
@@ -103,8 +105,8 @@ int Testcase2 = 5;
 bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
-	std::cout << "Server Active" << std::endl;
-	Server();
+	// std::cout << "Server Active" << std::endl;
+	// Server();
 	// while (true) {
 	// 	std::cout << "Server active" << std::endl;
 	// 	Server();
