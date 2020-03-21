@@ -1,66 +1,67 @@
 #include <TestCase.h>
 
 #define PORT 13200
-// void Server() { 
-// 	int server_fd, new_socket, valread; 
-// 	struct sockaddr_in address; 
-// 	int opt = 1; 
-// 	int addrlen = sizeof(address); 
-// 	char buffer[1024] = {0}; 
-// 	char *hello = "Hello from server"; 
+void Server() { 
+	int server_fd, new_socket, valread; 
+	struct sockaddr_in address; 
+	int opt = 1; 
+	int addrlen = sizeof(address); 
+	char buffer[1024] = {0}; 
+	char *hello = "Hello from server"; 
 	
-// 	// Creating socket file descriptor 
-// 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) 
-// 	{ 
-// 		perror("socket failed"); 
-// 		exit(EXIT_FAILURE); 
-// 	} 
+	// Creating socket file descriptor 
+	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) 
+	{ 
+		perror("socket failed"); 
+		exit(EXIT_FAILURE); 
+	} 
 
-// 	std::cout << "section 1 complete" << std::endl;
+	std::cout << "section 1 complete" << std::endl;
 	
-// 	// Forcefully attaching socket to the port 8080 
-// 	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
-// 												&opt, sizeof(opt))) 
-// 	{ 
-// 		perror("setsockopt"); 
-// 		exit(EXIT_FAILURE); 
-// 	} 
-// 	address.sin_family = AF_INET; 
-// 	address.sin_addr.s_addr = INADDR_ANY; 
-// 	address.sin_port = htons( PORT ); 
+	// Forcefully attaching socket to the port 8080 
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
+												&opt, sizeof(opt))) 
+	{ 
+		perror("setsockopt"); 
+		exit(EXIT_FAILURE); 
+	} 
+	address.sin_family = AF_INET; 
+	address.sin_addr.s_addr = INADDR_ANY; 
+	address.sin_port = htons( PORT ); 
 
-// 	std::cout << "Section 3 complete" << std::endl;
+	std::cout << "Section 3 complete" << std::endl;
 	
-// 	// Forcefully attaching socket to the port 8080 
-// 	if (bind(server_fd, (struct sockaddr *)&address, 
-// 								sizeof(address))<0) 
-// 	{ 
-// 		perror("bind failed"); 
-// 		exit(EXIT_FAILURE); 
-// 	} 
+	// Forcefully attaching socket to the port 8080 
+	if (bind(server_fd, (struct sockaddr *)&address, 
+								sizeof(address))<0) 
+	{ 
+		perror("bind failed"); 
+		exit(EXIT_FAILURE); 
+	} 
 
-// 	std::cout << "Section 4 complete" << std::endl;
-// 	if (listen(server_fd, 3) < 0) 
-// 	{ 
-// 		perror("listen"); 
-// 		exit(EXIT_FAILURE); 
-// 	} 
+	std::cout << "Section 4 complete" << std::endl;
+	if (listen(server_fd, 3) < 0) 
+	{ 
+		perror("listen"); 
+		exit(EXIT_FAILURE); 
+	} 
 
-// 	std::cout << "Section 5 complete" << std::endl;
-// 	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, 
-// 					(socklen_t*)&addrlen))<0) 
-// 	{ 
-// 		perror("accept"); 
-// 		exit(EXIT_FAILURE); 
-// 	} 
+	std::cout << "Section 5 complete" << std::endl;
+	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, 
+					(socklen_t*)&addrlen))<0) 
+	{ 
+		perror("accept"); 
+		exit(EXIT_FAILURE); 
+	} 
 
-// 	std::cout << "Section 6 complete" << std::endl;
-// 	valread = read( new_socket , buffer, 1024); 
-// 	printf("%s\n",buffer ); 
-// 	send(new_socket , hello , strlen(hello) , 0 ); 
-// 	printf("Hello message sent\n"); 
-// 	std::cout << "Section 7 complete" << std::endl;
-// } 
+	std::cout << "Section 6 complete" << std::endl;
+	valread = read( new_socket , buffer, 1024); 
+	std::cout << "Read following" << std::endl;
+	printf("%s\n",buffer, "\n" ); 
+	// send(new_socket , hello , strlen(hello) , 0 ); 
+	// printf("Hello message sent\n"); 
+	std::cout << "Section 7 complete" << std::endl;
+} 
 
 
 void Client() { 
@@ -103,17 +104,11 @@ int main() {
 	// 	std::cout << "Server active" << std::endl;
 	// 	Server();
 	// }
-	std::cout << "Working" << std::endl;
 	client.SetIP("192.168.178.153");
 	client.SetPort(13200);
 	client.Start();
-	// client.Register("TestCase", &Testcase);
+	client.Register("TestCase", &Testcase2);
 
-	// Client();
-	
-	std::cout << "Start Working" << std::endl;
-
-	// sleep(10);
 	while(true) {}
 
 	client.Stop();

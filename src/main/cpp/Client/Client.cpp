@@ -35,37 +35,38 @@ uint16_t Client::GetPort() {
 }
 
 void ItemIntIOThread(std::string name, int *item, ClientState *clientState) {
-	while(*clientState == ClientState::ACTIVE) {
-		#ifdef _WIN32
+	while(*clientState != ClientState::STOPPED) {
+		if (*clientState == ClientState::ACTIVE) {
+			#ifdef _WIN32
 
-		#else
-			// send(sock, item, , 0);
-			// cv.valread = read(cv.sock, cv.buffer, 1024);
-		#endif
+			#else
+				send(cv.sock, item, sizeof(item), 0);
+				// cv.valread = read(cv.sock, cv.buffer, 1024);
+			#endif
+		}
 	}
-	std::cout << "Named thread '" << name << "' Stopped";
+	std::cout << "Named thread '" << name << "' Stopped" << std::endl;
 }
 
 void Client::ItemIntIO(std::string name, int *item) {
-	std::cout << "ItemInt Called" << std::endl;
 	std::thread ItemIntIO_T(ItemIntIOThread, name, item, &_clientState);
 	ItemIntIO_T.detach();
 }
 
 // IO for string Looping thread
-void ItemStringIOThread(std::string name, std::string *item, ClientState *_clientState) {
-	while(*_clientState != ClientState::STOPPED) {
-		if (*_clientState == ClientState::ACTIVE) {
+void ItemStringIOThread(std::string name, std::string *item, ClientState *clientState) {
+	while(*clientState != ClientState::STOPPED) {
+		if (*clientState == ClientState::ACTIVE) {
 			#ifdef _WIN32
 
 			#else
 				// send(cv.sock, item, item->length(), 0);
-				cv.valread = read(cv.sock, cv.buffer, 1024);
-				printf("%s\n", cv.buffer);
+				// cv.valread = read(cv.sock, cv.buffer, 1024);
+				// printf("%s\n", cv.buffer);
 			#endif
 		}
 	}
-	std::cout << "Named thread '" << name << "' Stopped";
+	std::cout << "Named thread '" << name << "' Stopped" << std::endl;
 }
 
 // IO String thread caller
@@ -134,10 +135,10 @@ void ClientChecker(ClientState *currentState) {
 		} else if (*currentState == ClientState::PAUSED) {
 			printf("\n Client Paused \n");
 		}
-		char *TestSend = "Connection to Client Successful";
-		send(cv.sock, TestSend, strlen(TestSend), 0);
-		cv.valread = read(cv.sock, cv.buffer, 1024);
-		printf("%s\n", cv.buffer);
+		// char *TestSend = "Connection to Client Successful";
+		// send(cv.sock, TestSend, strlen(TestSend), 0);
+		// cv.valread = read(cv.sock, cv.buffer, 1024);
+		// printf("%s\n", cv.buffer);
 	}
 	printf("\n Client Stopped \n");
 }
