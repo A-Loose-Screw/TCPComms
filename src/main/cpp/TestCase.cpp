@@ -107,8 +107,8 @@ int Testcase2 = 5;
 bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
-	std::cout << "Server Active" << std::endl;
-	Server();
+	// std::cout << "Server Active" << std::endl;
+	// Server();
 	// while (true) {
 	// 	std::cout << "Server active" << std::endl;
 	// 	Server();
