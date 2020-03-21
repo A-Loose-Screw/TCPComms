@@ -61,6 +61,7 @@ void Server() {
 	int size;
 	while (true) {
 		// std::cout << "Value Before: " << Item << std::endl;
+		sleep(1);
 		size = recv(new_socket, &Item, sizeof(Item), 0);
 		if (size > 0) {
 			std::cout << "Value: " << Item << std::endl;
