@@ -58,7 +58,8 @@ void Server() {
 	// valread = read( new_socket , buffer, 1024); 
 	int Item = 0;
 	while (true) {
-		recv(new_socket, &Item, sizeof(Item), 0);
+		// std::cout << "Value Before: " << Item << std::endl;
+		Item = recv(new_socket, &Item, sizeof(Item), 0);
 		std::cout << "Value: " << Item << std::endl;
 	}
 	std::cout << "Section 7 complete" << std::endl;
@@ -98,6 +99,7 @@ void Client() {
 TCPComms::Client client;
 std::string Testcase = "This is a test";
 int Testcase2 = 5;
+// int *TestCaseMod = &Testcase2;
 bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
@@ -112,8 +114,9 @@ int main() {
 	client.Start();
 	client.Register("TestCase", &Testcase2);
 
-	sleep(20);
-	Testcase2 = 10;
+	sleep(10);
+	// *TestCaseMod = 10;
+	Testcase2 = 25;
 
 	while(true) {}
 
