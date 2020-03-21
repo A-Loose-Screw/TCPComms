@@ -40,6 +40,7 @@ void ItemIntIOThread(std::string name, int *item, ClientState *clientState) {
 			#ifdef _WIN32
 
 			#else
+				std::cout << "Item: " << *item << std::endl;
 				send(cv.sock, item, sizeof(item), 0);
 				// cv.valread = read(cv.sock, cv.buffer, 1024);
 			#endif

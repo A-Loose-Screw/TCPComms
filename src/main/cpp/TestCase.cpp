@@ -57,11 +57,10 @@ void Server() {
 	std::cout << "Section 6 complete" << std::endl;
 	// valread = read( new_socket , buffer, 1024); 
 	int Item;
-	recv(new_socket, &Item, sizeof(Item), 0);
-	// std::cout << "Read following" << std::endl;
-	printf("Data received: %d\n", Item);
-	// send(new_socket , hello , strlen(hello) , 0 ); 
-	// printf("Hello message sent\n"); 
+	while (true) {
+		recv(new_socket, &Item, sizeof(Item), 0);
+		printf("Data received: %d\n", Item);
+	}
 	std::cout << "Section 7 complete" << std::endl;
 } 
 
@@ -102,14 +101,19 @@ int Testcase2 = 5;
 bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
-	while (true) {
-		std::cout << "Server active" << std::endl;
-		Server();
-	}
+	std::cout << "Server Active" << std::endl;
+	Server();
+	// while (true) {
+	// 	std::cout << "Server active" << std::endl;
+	// 	Server();
+	// }
 	client.SetIP("192.168.178.153");
 	client.SetPort(13200);
 	client.Start();
 	client.Register("TestCase", &Testcase2);
+
+	sleep(20);
+	Testcase2 = 10;
 
 	while(true) {}
 
