@@ -56,13 +56,15 @@ void Server() {
 
 	std::cout << "Section 6 complete" << std::endl;
 	// valread = read( new_socket , buffer, 1024); 
-	int ItemBuffer;
+	// int ItemBuffer;
 	int Item;
+	int size;
 	while (true) {
 		// std::cout << "Value Before: " << Item << std::endl;
-		Item = recv(new_socket, &ItemBuffer, sizeof(Item), 0);
-		std::cout << "Value: " << Item << std::endl;
-		std::cout << "Buffer: " << ItemBuffer << std::endl;
+		size = recv(new_socket, &Item, sizeof(Item), 0);
+		if (size > 0) {
+			std::cout << "Value: " << Item << std::endl;
+		}
 	}
 	std::cout << "Section 7 complete" << std::endl;
 } 
@@ -72,7 +74,7 @@ void Client() {
 	int sock = 0, valread; 
 	struct sockaddr_in serv_addr; 
 	char *hello = "Hello from client"; 
-	char buffer[1024] = {0}; 
+	char buffer[1024] = {0};
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
 	{ 
 		printf("\n Socket creation error \n"); 
