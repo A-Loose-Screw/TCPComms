@@ -100,10 +100,10 @@ int Testcase2 = 5;
 bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
-	// while (true) {
-	// 	std::cout << "Server active" << std::endl;
-	// 	Server();
-	// }
+	while (true) {
+		std::cout << "Server active" << std::endl;
+		Server();
+	}
 	client.SetIP("192.168.178.153");
 	client.SetPort(13200);
 	client.Start();
