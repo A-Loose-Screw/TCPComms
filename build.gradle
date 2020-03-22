@@ -1,10 +1,4 @@
 plugins {
-	// // Apply the cpp-application plugin to add support for building C++ executables
-	// id 'cpp-application'
-
-	// // Apply the cpp-unit-test plugin to add support for building and running C++ test executables
-	// id 'cpp-unit-test'
-
 	id 'cpp'
 }
 
@@ -14,11 +8,11 @@ model {
       sources {
 				cpp {
 					source {
-						srcDirs "src/main/cpp", "src/shared/c++"
+						srcDirs "src/main/cpp"
 						include "**/*.cpp"
 					}
 					exportedHeaders {
-						srcDirs "src/main/include", "src/shared/include"
+						srcDirs "src/main/include"
 					}
 				}
       }
@@ -31,13 +25,3 @@ model {
     }
   }
 }
-
-
-
-// Set the target operating system and architecture for this application (i'm going to assume all for better functionality)
-// application {
-// 	targetMachines.add(machines.linux.x86_64)
-// 	targetMachines.add(machines.windows.x86)
-// 	targetMachines.add(machines.windows.x86_64)
-// 	targetMachines.add(machines.macOS.x86_64)
-// }
