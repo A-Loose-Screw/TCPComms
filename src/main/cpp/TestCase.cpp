@@ -163,12 +163,12 @@ int main() {
 	sleep(10);
 
 	while(true) {
-		// sleep(0.1);
-		// if (Testcase2 < 1000) {
-		// 	Testcase2 += 1;
-		// } else {
-		// 	Testcase2 = 0;
-		// }
+		sleep(0.1);
+		if (Testcase2 < 1000) {
+			Testcase2 += 1;
+		} else {
+			Testcase2 = 0;
+		}
 	}
 
 
