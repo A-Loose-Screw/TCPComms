@@ -1,6 +1,42 @@
 #include <TestCase.h>
 
 #define PORT 13200
+
+#define BUFSIZE 512
+#define PACKETSIZE sizeof(ItemStruct)
+
+// Item struct
+struct ItemStruct {
+	int value;
+	char name[BUFSIZE]; // Acts as ID
+};
+
+void serializeServer(ItemStruct *msgPacket, char *data) {
+	int *q = (int*)data;	
+	*q = msgPacket->value;	q++;	
+	
+	char *p = (char*)q;
+	int i = 0;
+	while (i < BUFSIZE) {
+		*p = msgPacket->name[i];
+		p++;
+		i++;
+	}
+}
+
+void deserializeServer(char *data, ItemStruct *msgPacket) {
+	int *q = (int*)data;	
+	msgPacket->value = *q;		q++;	
+	
+	char *p = (char*)q;
+	int i = 0;
+	while (i < BUFSIZE) {
+		msgPacket->name[i] = *p;
+		p++;
+		i++;
+	}
+}
+
 void Server() { 
 	int server_fd, new_socket, valread; 
 	struct sockaddr_in address; 
@@ -57,14 +93,21 @@ void Server() {
 	std::cout << "Section 6 complete" << std::endl;
 	// valread = read( new_socket , buffer, 1024); 
 	// int ItemBuffer;
-	int Item;
 	int size;
+
+	std::string nameOfItem;
+	int valueOfItem;
 	while (true) {
 		// std::cout << "Value Before: " << Item << std::endl;
-		sleep(1);
-		size = recv(new_socket, &Item, sizeof(Item), 0);
+		// sleep(1);
+		char data[PACKETSIZE];
+		size = recv(new_socket, &data, sizeof(data), 0);
+		ItemStruct *itemStruct = new ItemStruct;
+		deserializeServer(data, itemStruct);
+
 		if (size > 0) {
-			std::cout << "Value: " << Item << std::endl;
+			std::cout << itemStruct->name << ": ";
+			std::cout << itemStruct->value << std::endl;
 		}
 	}
 	std::cout << "Section 7 complete" << std::endl;
@@ -85,7 +128,7 @@ void Client() {
 	serv_addr.sin_port = htons(PORT);
 	
 	// Convert IPv4 and IPv6 addresses from text to binary form 
-	if(inet_pton(AF_INET, "192.168.178.153", &serv_addr.sin_addr)<=0) 
+	if(inet_pton(AF_INET, "127.168.178.153", &serv_addr.sin_addr)<=0) 
 	{ 
 		printf("\nInvalid address/ Address not supported \n"); 
 	} 
@@ -99,7 +142,6 @@ void Client() {
 	printf("%s\n",buffer ); 
 } 
 
-
 // Test case to send and recieve;
 TCPComms::Client client;
 std::string Testcase = "This is a test";
@@ -109,21 +151,26 @@ bool Testcase3 = true;
 double Tescase4 = 0.5;
 int main() {
 	std::cout << "Server Active" << std::endl;
-	Server();
-	// while (true) {
-	// 	std::cout << "Server active" << std::endl;
-	// 	Server();
-	// }
-	client.SetIP("192.168.178.59");
+	std::thread server_t(Server);
+	server_t.detach();
+	
+	client.SetIP("127.0.0.1");
 	client.SetPort(13200);
 	client.Start();
-	client.Register("TestCase", &Testcase2);
+	client.SetItem("Motor1", &Testcase2);
+	client.SetItem("TestCase2", &Testcase);
 
 	sleep(10);
-	// *TestCaseMod = 10;
-	Testcase2 = 25;
 
-	while(true) {}
+	while(true) {
+		// sleep(0.1);
+		// if (Testcase2 < 1000) {
+		// 	Testcase2 += 1;
+		// } else {
+		// 	Testcase2 = 0;
+		// }
+	}
+
 
 	client.Stop();
 }

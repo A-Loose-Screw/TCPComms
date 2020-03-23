@@ -20,24 +20,20 @@ typedef int socklen_t;
 #include <arpa/inet.h>      // Contains all inet_* functions.
 #include <errno.h>          // Contains the error functions.
 #include <fcntl.h>          // File control.
-#include <stdio.h> 
-#include <sys/socket.h> 
 #include <arpa/inet.h> 
-#include <unistd.h> 
-#include <string.h> 
-#include <iostream>
+#include <assert.h>
 
-#include <unistd.h> 
-#include <stdio.h> 
-#include <sys/socket.h> 
+#include <stdio.h>  
 #include <stdlib.h> 
 #include <netinet/in.h> 
 #include <string.h> 
+#include <cstring>
 #endif
 
 // Shared Libraries
 #include <string>
 #include <vector>
+#include <iostream>
 #include <thread>
 
 namespace TCPComms {
@@ -98,60 +94,106 @@ namespace TCPComms {
 		}
 
 		/**
-		 * Register Item with name
+		 * Set Item with name
 		 */
-		void Register(std::string name, int *item) {
+		void SetItem(std::string name, int *item) {
 			try {
-				ItemIntIO(name, item);
-			}
-			catch(const std::exception& e) {
+				ItemIntOut(name, item);
+			} catch(const std::exception& e) {
 				std::cerr << e.what() << '\n';
 			}
 		}
 
 		/**
-		 * Register Item with name
+		 * Get Item with name
 		 */
-		void Register(std::string name, std::string *item) {
+		void GetItem(std::string name, int *item) {
 			try {
-				ItemStringIO(name, item);
-			}
-			catch(const std::exception& e) {
+				ItemIntIn(name, item);
+			} catch(const std::exception& e) {
 				std::cerr << e.what() << '\n';
 			}
 		}
 
 		/**
-		 * Register Item with name
+		 * Set Item with name
 		 */
-		void Register(std::string name, bool *item) {
+		void SetItem(std::string name, std::string *item) {
 			try {
-				ItemBoolIO(name, item);
-			}
-			catch(const std::exception& e) {
+				ItemStringOut(name, item);
+			} catch(const std::exception& e) {
 				std::cerr << e.what() << '\n';
 			}
 		}
 
 		/**
-		 * Register Item with name
+		 * Get Item with name
 		 */
-		void Register(std::string name, double *item) {
+		void GetItem(std::string name, std::string *item) {
 			try {
-				ItemDoubleIO(name, item);
+				ItemStringIn(name, item);
+			} catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
 			}
-			catch(const std::exception& e) {
+		}
+
+		/**
+		 * Set Item with name
+		 */
+		void SetItem(std::string name, bool *item) {
+			try {
+				ItemBoolOut(name, item);
+			} catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
+			}
+		}
+
+		/**
+		 * Get Item with name
+		 */
+		void GetItem(std::string name, bool *item) {
+			try {
+				ItemBoolIn(name, item);
+			} catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
+			}
+		}
+
+		/**
+		 * Set Item with name
+		 */
+		void SetItem(std::string name, double *item) {
+			try {
+				ItemDoubleOut(name, item);
+			} catch(const std::exception& e) {
+				std::cerr << e.what() << '\n';
+			}
+		}
+
+		/**
+		 * Get Item with name
+		 */
+		void GetItem(std::string name, double *item) {
+			try {
+				ItemDoubleIn(name, item);
+			} catch(const std::exception& e) {
 				std::cerr << e.what() << '\n';
 			}
 		}
 
    private:
 
-		// Function to send and receive item
-		void ItemIntIO(std::string name, int *item);
-		void ItemStringIO(std::string name, std::string *item);
-		void ItemBoolIO(std::string name, bool *item);
-		void ItemDoubleIO(std::string name, double *item);
+		// Function to recieve items
+		void ItemIntIn(std::string name, int *item);
+		void ItemStringIn(std::string name, std::string *item);
+		void ItemBoolIn(std::string name, bool *item);
+		void ItemDoubleIn(std::string name, double *item);
+
+		// Function to send items
+		void ItemIntOut(std::string name, int *item);
+		void ItemStringOut(std::string name, std::string *item);
+		void ItemBoolOut(std::string name, bool *item);
+		void ItemDoubleOut(std::string name, double *item);
 
 		
 		// Thread Controller & Checkers

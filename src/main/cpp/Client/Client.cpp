@@ -17,6 +17,15 @@ struct ConnectionVars {
 	#endif
 }; ConnectionVars cv;
 
+#define BUFSIZE 512
+#define PACKETSIZE sizeof(ItemStruct)
+
+// Item struct
+typedef struct ItemStruct {
+	int value; // Value
+	char name[BUFSIZE]; // Acts as ID
+};
+
 
 void Client::SetIP(const char *ip) {
 	cv.ipaddress = ip;
@@ -34,34 +43,66 @@ uint16_t Client::GetPort() {
 	return cv.port;
 }
 
-void ItemIntIOThread(std::string name, int *item, ClientState *clientState) {
+void serializeClient(ItemStruct *msgPacket, char *data) {
+	int *q = (int*)data;	
+	*q = msgPacket->value;	q++;	
+	
+	char *p = (char*)q;
+	int i = 0;
+	while (i < BUFSIZE) {
+		*p = msgPacket->name[i];
+		p++;
+		i++;
+	}
+}
+
+void deserializeClient(char *data, ItemStruct *msgPacket) {
+	int *q = (int*)data;	
+	msgPacket->value = *q;		q++;	
+	
+	char *p = (char*)q;
+	int i = 0;
+	while (i < BUFSIZE) {
+		msgPacket->name[i] = *p;
+		p++;
+		i++;
+	}
+}
+
+void ItemIntOutThread(std::string name, int *itemValue, ClientState *clientState) {
 	while(*clientState != ClientState::STOPPED) {
 		if (*clientState == ClientState::ACTIVE) {
+			ItemStruct *itemStruct = new ItemStruct;
+			itemStruct->value = *itemValue;
+			strcpy(itemStruct->name, name.c_str());
+
+			char data[PACKETSIZE];
+			serializeClient(itemStruct, data);
+
 			#ifdef _WIN32
 
 			#else
-				send(cv.sock, item, sizeof(item), 0);
-				std::cout << "Item: " << *item << std::endl;
-				// cv.valread = read(cv.sock, cv.buffer, 1024);
+				send(cv.sock, &data, sizeof(data), 0);
 			#endif
 		}
 	}
 	std::cout << "Named thread '" << name << "' Stopped" << std::endl;
 }
 
-void Client::ItemIntIO(std::string name, int *item) {
-	std::thread ItemIntIO_T(ItemIntIOThread, name, item, &_clientState);
-	ItemIntIO_T.detach();
+// Output Int caller
+void Client::ItemIntOut(std::string name, int *itemValue) {
+	struct ItemStruct itemStruct;
+	std::thread ItemIntOut_T(ItemIntOutThread, name, itemValue, &_clientState);
+	ItemIntOut_T.detach();
 }
 
-// IO for string Looping thread
-void ItemStringIOThread(std::string name, std::string *item, ClientState *clientState) {
+void ItemStringOutThread(std::string name, std::string *itemValue, ClientState *clientState) {
 	while(*clientState != ClientState::STOPPED) {
 		if (*clientState == ClientState::ACTIVE) {
 			#ifdef _WIN32
 
 			#else
-				// send(cv.sock, item, item->length(), 0);
+				// send(cv.sock, itemValue, itemValue->length(), 0);
 				// cv.valread = read(cv.sock, cv.buffer, 1024);
 				// printf("%s\n", cv.buffer);
 			#endif
@@ -70,25 +111,32 @@ void ItemStringIOThread(std::string name, std::string *item, ClientState *client
 	std::cout << "Named thread '" << name << "' Stopped" << std::endl;
 }
 
-// IO String thread caller
-void Client::ItemStringIO(std::string name, std::string *item) {
-	std::thread ItemStringIO_T(ItemStringIOThread, name, item, &_clientState);
-	ItemStringIO_T.detach();
+// Output String thread caller
+void Client::ItemStringOut(std::string name, std::string *itemValue) {
+	struct ItemStruct itemStruct;
+	// itemStruct.value = 10;
+	std::thread ItemStringOut_T(ItemStringOutThread, name, itemValue, &_clientState);
+	ItemStringOut_T.detach();
 }
 
-void ItemBoolIOThread(std::string name, bool *item, ClientState *clientState) {
+void ItemBoolOutThread(std::string name, bool *itemValue, ClientState *clientState) {
 
 }
 
-// IO Bool thread caller
-void Client::ItemBoolIO(std::string name, bool *item) {
-	std::thread ItemBoolIO_T(ItemBoolIOThread, name, item, &_clientState);
-	ItemBoolIO_T.detach();
+// Output Bool thread caller
+void Client::ItemBoolOut(std::string name, bool *itemValue) {
+	std::thread ItemBoolOut_T(ItemBoolOutThread, name, itemValue, &_clientState);
+	ItemBoolOut_T.detach();
 }
 
-// IO Double thread caller
-void Client::ItemDoubleIO(std::string name, double *item) {
-	
+void ItemDoubleOutThread(std::string name, double *itemValue, ClientState *ClientState) {
+
+}
+
+// Output Double thread caller
+void Client::ItemDoubleOut(std::string name, double *itemValue) {
+	std::thread ItemDoubleOut_T(ItemDoubleOutThread, name, itemValue, &_clientState);
+	ItemDoubleOut_T.detach();
 }
 
 // Connect to address
