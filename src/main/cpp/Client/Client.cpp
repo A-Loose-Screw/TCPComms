@@ -70,9 +70,9 @@ void deserializeClient(char *data, ItemStruct *msgPacket) {
 }
 
 void ItemIntOutThread(std::string name, int *itemValue, ClientState *clientState) {
+	ItemStruct *itemStruct = new ItemStruct;
 	while(*clientState != ClientState::STOPPED) {
 		if (*clientState == ClientState::ACTIVE) {
-			ItemStruct *itemStruct = new ItemStruct;
 			itemStruct->value = *itemValue;
 			strcpy(itemStruct->name, name.c_str());
 
@@ -91,7 +91,6 @@ void ItemIntOutThread(std::string name, int *itemValue, ClientState *clientState
 
 // Output Int caller
 void Client::ItemIntOut(std::string name, int *itemValue) {
-	struct ItemStruct itemStruct;
 	std::thread ItemIntOut_T(ItemIntOutThread, name, itemValue, &_clientState);
 	ItemIntOut_T.detach();
 }

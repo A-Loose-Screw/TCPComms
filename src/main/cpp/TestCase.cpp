@@ -93,8 +93,8 @@ void Server() {
 	std::cout << "Section 6 complete" << std::endl;
 	// valread = read( new_socket , buffer, 1024); 
 	// int ItemBuffer;
-	int size;
-
+	
+	ItemStruct *itemStruct = new ItemStruct;int size;
 	std::string nameOfItem;
 	int valueOfItem;
 	while (true) {
@@ -102,12 +102,12 @@ void Server() {
 		// sleep(1);
 		char data[PACKETSIZE];
 		size = recv(new_socket, &data, sizeof(data), 0);
-		ItemStruct *itemStruct = new ItemStruct;
 		deserializeServer(data, itemStruct);
-
 		if (size > 0) {
-			std::cout << itemStruct->name << ": ";
-			std::cout << itemStruct->value << std::endl;
+			if (itemStruct->name == "Motor2") {
+				std::cout << itemStruct->name << ": ";
+				std::cout << itemStruct->value << std::endl;
+			}
 		}
 	}
 	std::cout << "Section 7 complete" << std::endl;
@@ -158,7 +158,27 @@ int main() {
 	client.SetPort(13200);
 	client.Start();
 	client.SetItem("Motor1", &Testcase2);
-	client.SetItem("TestCase2", &Testcase);
+	client.SetItem("Motor2", &Testcase2);
+	client.SetItem("Motor3", &Testcase2);
+	client.SetItem("Motor4", &Testcase2);
+	client.SetItem("Motor5", &Testcase2);
+	client.SetItem("Motor6", &Testcase2);
+	client.SetItem("Motor7", &Testcase2);
+	client.SetItem("Motor8", &Testcase2);
+	client.SetItem("Motor9", &Testcase2);
+	client.SetItem("Motor10", &Testcase2);
+
+	client.SetItem("Motor11", &Testcase2);
+	client.SetItem("Motor12", &Testcase2);
+	client.SetItem("Motor13", &Testcase2);
+	client.SetItem("Motor14", &Testcase2);
+	client.SetItem("Motor15", &Testcase2);
+	client.SetItem("Motor16", &Testcase2);
+	client.SetItem("Motor17", &Testcase2);
+	client.SetItem("Motor18", &Testcase2);
+	client.SetItem("Motor19", &Testcase2);
+	client.SetItem("Motor20", &Testcase2);
+	// client.SetItem("TestCase2", &Testcase);
 
 	sleep(10);
 
