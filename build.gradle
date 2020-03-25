@@ -9,10 +9,12 @@ model {
 				cpp {
 					source {
 						srcDirs "src/main/cpp"
+						srcDirs "src/main/test"
 						include "**/*.cpp"
 					}
 					exportedHeaders {
 						srcDirs "src/main/include"
+						srcDirs "src/main/test"
 					}
 				}
       }
